@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import ArticleList from './components/Article';
+import AddArticleForm from './components/addArticle';
+import EditArticleForm from './components/editArticle';
+import FetchArticleList from './components/fetchArticleList';
+import './styles/ReactPage.css';
+import Header from './components/header';
 
-function App() {
+const App = () => {
+  const [ setArticles] = useState([]);
+  const [selectedArticleId, setSelectedArticleId] = useState(null);
+  const articles = FetchArticleList();
+
+  const handleSelectArticle = (articleId) => {
+    setSelectedArticleId(articleId);
+  };
+
+  const handleDeleteArticle = (articleId) => {
+    setArticles(articles.filter(article => article.id !== articleId));
+
+  };
+  
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div className="container">
+      <Header />
+      <div className='form-container'>
+        <AddArticleForm />
+        <EditArticleForm articleId={selectedArticleId} />
+      </div>
+      <div className="article-list">
+        <ArticleList articles={articles} onSelectArticle={handleSelectArticle} onDelete={handleDeleteArticle} />
+      </div>
+      </div>
+    
   );
-}
+};
 
 export default App;
